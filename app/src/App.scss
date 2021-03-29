@@ -1,0 +1,37 @@
+/* @styled-jsx=global */
+
+$border: #CCC;
+$green: #047779;
+$yellow: #d2c966;
+$grey: #777;
+$light-grey: #DEDEDE;
+
+$box-pad: 16px;
+
+
+@mixin mobile {
+  @media only screen and (min-width: 100px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media only screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin tablet-landscape {
+  @media only screen and (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media only screen and (min-width: 1248px) { 
+    @content;
+  }
+}
+
+
+@import "./components/UserTable.scss"; 

@@ -20,7 +20,8 @@ const loadMock = () => {
     return accounts;
 }
 
-/* preload country list from public api
+/* 
+Preload country list from public api
 data > object that contains country code element
 */
 const getCountries = (data) => {
@@ -45,7 +46,8 @@ const getCountries = (data) => {
     
 }
 
-/* map out countries and pupulate country name in object
+/* 
+Map out countries and pupulate country name in object
 data > object that contains country code element
 */
 const mapCountries = (data) => {

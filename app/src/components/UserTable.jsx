@@ -6,11 +6,12 @@ import 'react-data-table-component-extensions/dist/index.css';
 
 import { Button } from 'semantic-ui-react'
 
+import FilterByCountry from './FilterByCountry';
 import FilterBy from './FilterBy';
+import moment from 'moment';
 
 function UserTable() {
     const [tableData, setTableDate] = useState({});
-    let countryList = {};
     let queryParams = new URLSearchParams();
 
     useEffect(() => {
@@ -67,6 +68,12 @@ function UserTable() {
             name: 'Date Of Birth',
             selector: 'dob',
             sortable: true,
+            cell: row => {
+                const formatedDate = moment(row.dob).format('MM/DD/YYYY');;
+                return (
+                    <div>{formatedDate}</div>
+                );
+            },
         },
         {
             name: 'Auth Type',
@@ -85,9 +92,15 @@ function UserTable() {
             },
         },
         {
-            name: 'CreatedDate',
-            selector: 'created',
+            name: 'Created Date',
+            selector: 'createdDate',
             sortable: true,
+            cell: row => {
+                const formatedDate = moment(row.createdDate).format('MM/DD/YYYY');;
+                return (
+                    <div>{formatedDate}</div>
+                );
+            },
         },
         {
             name: 'Referred By',
@@ -98,6 +111,10 @@ function UserTable() {
 
     const searchCountry = (event, data) => {
         queryParams.set('country', data.value);
+    }
+
+    const searchBy = (event, data) => {
+        queryParams.set(data.selector, data.value);
     }
 
     const searchTable = () => {
@@ -113,8 +130,8 @@ function UserTable() {
     return (
         <div>
             <div className="search-table">
-                <FilterBy countries={countryList} searchCountry={searchCountry} />
-                {/* <FilterBy field="Auth Type" selector="mfa" setSearch={setSearch} /> */}
+                <FilterByCountry searchCountry={searchCountry} />
+                <FilterBy field="Auth Type" field="Auth Type" selector="mfa" searchBy={searchBy} />
                 <Button primary onClick={searchTable}>Filter</Button>
             </div>
 

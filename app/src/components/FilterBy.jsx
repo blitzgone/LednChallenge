@@ -29,14 +29,14 @@ function FilterBy({field, selector, searchBy}) {
 
     return ( 
         <div>
-            {field}:
+            <label>{field}:</label>
             <Dropdown
+                clearable={true}
                 placeholder={'Select '+field}
                 fluid
-                search
+                search 
                 selection
                 selector={selector}
-                multiple=""
                 options={mfaList}
                 onChange={searchBy}
             />

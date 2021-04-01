@@ -1,5 +1,5 @@
 
-const axios = require('axios');
+const axios = require('axios')
 
 const jsonServer = require('json-server')
 const server = jsonServer.create()
@@ -12,12 +12,12 @@ const path = require('path')
 server.use(jsonServer.bodyParser)
 server.use(middlewares)
 
-let countryList = [];
+let countryList = []
 
 const loadMock = () => {
-    let rawdata = fs.readFileSync(path.resolve(__dirname, 'accounts.json'));
-    let accounts = JSON.parse(rawdata);
-    return accounts;
+    let rawdata = fs.readFileSync(path.resolve(__dirname, 'accounts.json'))
+    let accounts = JSON.parse(rawdata)
+    return accounts
 }
 
 /* 
@@ -29,18 +29,18 @@ const getCountries = (data) => {
         return axios.get('https://restcountries.eu/rest/v2/all')
             .then(res => {
                 // save contry list for other country lookups
-                const countries = res.data;
-                countryList = countries;
+                const countries = res.data
+                countryList = countries
 
-                return mapCountries(data);
+                return mapCountries(data)
 
             }).catch(function (error) {
-                console.log(error);
+                console.log(error)
             })
     } else {
         return promise = new Promise((resolve) => {
-            resolve( mapCountries(data) );
-        });
+            resolve( mapCountries(data) )
+        })
 
     }
     
@@ -52,42 +52,45 @@ data > object that contains country code element
 */
 const mapCountries = (data) => {
     const newData = data.map(e => {
-        const countryElement = countryList.find(item => item.alpha2Code == e.country);
-        e.countryName = countryElement.name;
-        return e;
-    });
+        const countryElement = countryList.find(item => item.alpha2Code == e.country)
+        e.countryName = countryElement.name
+        return e
+    })
 
-    return newData;
+    return newData
 }
 
 server.get('/users', (request, response) => {
     if (request.method === 'GET') {
 
 
-        let accounts = loadMock();
-        let returnAccount = [];
+        let accounts = loadMock()
+        let returnAccount = []
 
-        
-        if (typeof request.query.mfa != 'undefined') { 
-            accounts = accounts.filter(function (account) {
+        returnAccount = accounts
+
+        if (typeof request.query.mfa != 'undefined' && request.query.mfa != '') { 
+            returnAccount = accounts.filter(function (account) {
                 if (account.mfa === request.query.mfa) {
-                    return account;
+                    return account
                 }
-            });
+            })
         }
 
-
-        if (typeof request.query.country != 'undefined') {
-            accounts = accounts.filter(function (account) {
+        if (typeof request.query.country != 'undefined' && request.query.country != '') {
+            returnAccount = accounts.filter(function (account) {
                 if (account.country === request.query.country) {
-                    return account; 
+                    return account 
                 }
-            });
+            })
         }
 
-
-        if (Object.keys(request.query).length === 0) {
-            returnAccount = accounts;
+        if (typeof request.query.mfa != 'undefined' && request.query.mfa != '' && typeof request.query.country != 'undefined' && request.query.country != '') {
+            returnAccount = accounts.filter(function (account) {
+                if (account.country === request.query.country && account.mfa === request.query.mfa) {
+                    return account 
+                }
+            })
         }
 
 
@@ -101,11 +104,11 @@ server.get('/users', (request, response) => {
 })
 
 server.get('/countries', (request, response) => {
-    let accounts = loadMock();
+    let accounts = loadMock()
     let uniqueCountries = [...new Set(accounts.map(account => account.country))]
     uniqueCountries = uniqueCountries.map(item => {
-        return { 'country': item };
-    });
+        return { 'country': item }
+    })
     
     getCountries(uniqueCountries).then(res => {
         response.status(200).jsonp(res)
@@ -114,7 +117,7 @@ server.get('/countries', (request, response) => {
 })
 
 server.get('/mfa', (request, response) => {
-    let accounts = loadMock();
+    let accounts = loadMock()
     let uniqueMFA = [...new Set(accounts.map(account => account.mfa))]
     uniqueMFA = uniqueMFA.filter(item => item !== "null")
 

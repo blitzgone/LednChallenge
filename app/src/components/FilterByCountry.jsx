@@ -32,13 +32,13 @@ function FilterByCountry({searchCountry}) {
 
     return ( 
         <div>
-            Country:
+            <label>Country:</label>
             <Dropdown
+                clearable={true}
                 placeholder='Select Country'
                 fluid
                 search
                 selection
-                multiple=""
                 options={countryList}
                 onChange={searchCountry}
             />
